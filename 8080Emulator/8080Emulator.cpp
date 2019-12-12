@@ -509,12 +509,57 @@ void Emulate8080p(State8080* state)
 			state->a = result & 0xff;
 		}
 		break;
-		case 0x81: UnimplementedInstruction(state); break;
-		case 0x82: UnimplementedInstruction(state); break;
-		case 0x83: UnimplementedInstruction(state); break;
-		case 0x84: UnimplementedInstruction(state); break;
-		case 0x85: UnimplementedInstruction(state); break;
-		case 0x86:	//ADD M			Here M is the value stored in the address of pair HL
+		case 0x81:									//ADD C
+		{
+			uint16_t result = (uint16_t)state->a + (uint16_t)state->c;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x82:									//ADD D
+		{
+			uint16_t result = (uint16_t)state->a + (uint16_t)state->d;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x83:									//ADD E
+		{
+			uint16_t result = (uint16_t)state->a + (uint16_t)state->e;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x84:									//ADD H
+		{
+			uint16_t result = (uint16_t)state->a + (uint16_t)state->h;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x85:									//ADD L
+		{
+			uint16_t result = (uint16_t)state->a + (uint16_t)state->l;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x86:									//ADD M			Here M is the value stored in the address of pair HL
 		{
 			//Create the 16bit address from the H and L registers
 			uint16_t offset = (state->h << 8) | (state->l);
@@ -526,31 +571,259 @@ void Emulate8080p(State8080* state)
 			state->a = result & 0xff;
 		}
 		break;
-		case 0x87: UnimplementedInstruction(state); break;
-		case 0x88: UnimplementedInstruction(state); break;
-		case 0x89: UnimplementedInstruction(state); break;
-		case 0x8a: UnimplementedInstruction(state); break;
-		case 0x8b: UnimplementedInstruction(state); break;
-		case 0x8c: UnimplementedInstruction(state); break;
-		case 0x8d: UnimplementedInstruction(state); break;
-		case 0x8e: UnimplementedInstruction(state); break;
-		case 0x8f: UnimplementedInstruction(state); break;
-		case 0x90: UnimplementedInstruction(state); break;
-		case 0x91: UnimplementedInstruction(state); break;
-		case 0x92: UnimplementedInstruction(state); break;
-		case 0x93: UnimplementedInstruction(state); break;
-		case 0x94: UnimplementedInstruction(state); break;
-		case 0x95: UnimplementedInstruction(state); break;
-		case 0x96: UnimplementedInstruction(state); break;
-		case 0x97: UnimplementedInstruction(state); break;
-		case 0x98: UnimplementedInstruction(state); break;
-		case 0x99: UnimplementedInstruction(state); break;
-		case 0x9a: UnimplementedInstruction(state); break;
-		case 0x9b: UnimplementedInstruction(state); break;
-		case 0x9c: UnimplementedInstruction(state); break;
-		case 0x9d: UnimplementedInstruction(state); break;
-		case 0x9e: UnimplementedInstruction(state); break;
-		case 0x9f: UnimplementedInstruction(state); break;
+		case 0x87:									//ADD A
+		{
+			uint16_t result = (uint16_t)state->a + (uint16_t)state->a;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x88:									//ADC B
+		{
+			uint16_t result = (uint16_t)state->a + (uint16_t)state->b + state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x89:									//ADC C
+		{
+			uint16_t result = (uint16_t)state->a + (uint16_t)state->c + state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x8a:									//ADC D
+		{
+			uint16_t result = (uint16_t)state->a + (uint16_t)state->d + state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x8b:									//ADC E
+		{
+			uint16_t result = (uint16_t)state->a + (uint16_t)state->e + state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x8c:									//ADC H
+		{
+			uint16_t result = (uint16_t)state->a + (uint16_t)state->h + state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x8d:									//ADC L
+		{
+			uint16_t result = (uint16_t)state->a + (uint16_t)state->l + state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x8e:									//ADC M
+		{
+			uint16_t offset = (state->h << 8) | (state->l);
+			uint16_t result = (uint16_t)state->a + state->memory[offset] + state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x8f:									//ADC A
+		{
+			uint16_t result = (uint16_t)state->a + (uint16_t)state->a + state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x90:									//SUB B
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)state->b;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x91:									//SUB C
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)state->c;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x92:									//SUB D
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)state->d;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x93:									//SUB E
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)state->e;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x94:									//SUB H
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)state->h;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x95:									//SUB L
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)state->l;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x96:									//SUB M
+		{
+			uint16_t offset = (state->h << 8) | (state->l);
+			uint16_t result = (uint16_t)state->a - state->memory[offset];
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x97:									//SUB A
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)state->a;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x98:									//SBB B
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)state->b - state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x99:									//SBB C
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)state->c - state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x9a:									//SBB D
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)state->d - state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x9b:									//SBB E
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)state->e - state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x9c:									//SBB H
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)state->h - state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x9d:									//SBB L
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)state->l - state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x9e:									//SBB M
+		{
+			uint16_t offset = (state->h << 8) | (state->l);
+			uint16_t result = (uint16_t)state->a - state->memory[offset] - state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
+		case 0x9f:									//SBB A
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)state->a - state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
 		case 0xa0: UnimplementedInstruction(state); break;
 		case 0xa1: UnimplementedInstruction(state); break;
 		case 0xa2: UnimplementedInstruction(state); break;
@@ -583,7 +856,15 @@ void Emulate8080p(State8080* state)
 		case 0xbd: UnimplementedInstruction(state); break;
 		case 0xbe: UnimplementedInstruction(state); break;
 		case 0xbf: UnimplementedInstruction(state); break;
-		case 0xc0: UnimplementedInstruction(state); break;
+		case 0xc0:									//RNZ
+		{
+			if (0 == state->cc.z)
+			{
+				state->pc = state->memory[state->sp] | (state->memory[state->sp + 1] << 8); //Jump to the address on the stack
+				state->sp += 2;
+			}
+		}
+		break;
 		case 0xc1:									//POP B
 		{
 
@@ -591,21 +872,39 @@ void Emulate8080p(State8080* state)
 		break;
 		case 0xc2:									//JNZ adr
 		{
-
+			if(0 == state->cc.z)
+				state->pc = (opcode[2] << 8) | opcode[1]; //Set the program counter to the next 16bit address
+			else 
+				state->pc += 2; //Branch not taken
 		}
 		break;
 		case 0xc3:									//JMP adr
 		{
-
+			state->pc = (opcode[2] << 8) | opcode[1];
 		}
 		break;
-		case 0xc4: UnimplementedInstruction(state); break;
+		case 0xc4:									//CNZ adr
+		{
+			if (0 == state->cc.z)
+			{
+				uint16_t result = state->pc + 2;
+				state->memory[state->sp - 1] = (result >> 8) & 0xff;
+				state->memory[state->sp - 2] = (result & 0xff);
+				state->sp = state->sp - 2;
+				state->pc = (opcode[2] << 8) | opcode[1];
+			}
+			else
+			{
+				state->pc += 2;
+			}
+		}
+		break;
 		case 0xc5:									//PUSH B
 		{
 
 		}
 		break;
-		case 0xc6:	//ADI byte
+		case 0xc6:									//ADI byte
 		{
 			uint16_t result = (uint16_t)state->a + (uint16_t) opcode[1];
 			state->cc.z = ((result & 0xff) == 0);
@@ -616,31 +915,106 @@ void Emulate8080p(State8080* state)
 		}
 		break;
 		case 0xc7: UnimplementedInstruction(state); break;
-		case 0xc8: UnimplementedInstruction(state); break;
+		case 0xc8:									//RZ
+		{
+			if (1 == state->cc.z)
+			{ 
+				state->pc = state->memory[state->sp] | (state->memory[state->sp + 1] << 8); //Jump to the address on the stack
+				state->sp += 2;
+			}
+		}
+		break;
 		case 0xc9:									//RET
 		{
-
+			state->pc = state->memory[state->sp] | (state->memory[state->sp + 1] << 8); //Jump to the address on the stack
+			state->sp += 2;
 		}
 		break;
-		case 0xca: UnimplementedInstruction(state); break;
+		case 0xca:									//JZ adr
+		{
+			if (1 == state->cc.z)
+				state->pc = (opcode[2] << 8) | opcode[1];
+			else
+				state->pc += 2;
+		}
+		break;
 		case 0xcb: UnimplementedInstruction(state); break;
-		case 0xcc: UnimplementedInstruction(state); break;
+		case 0xcc:									//CZ adr
+		{
+			if (1 == state->cc.z)
+			{
+				uint16_t result = state->pc + 2;
+				state->memory[state->sp - 1] = (result >> 8) & 0xff;
+				state->memory[state->sp - 2] = (result & 0xff);
+				state->sp = state->sp - 2;
+				state->pc = (opcode[2] << 8) | opcode[1];
+			}
+			else
+			{
+				state->pc += 2;
+			}
+		}
+		break;
 		case 0xcd:									//CALL adr
 		{
+			uint16_t result = state->pc + 2;	///Get the address of the instruction after this one
+			state->memory[state->sp - 1] = (result >> 8) & 0xff; //Put the address on the stack
+			state->memory[state->sp - 2] = (result & 0xff);
+			state->sp = state->sp - 2; 
+			state->pc = (opcode[2] << 8) | opcode[1]; //Jump to the given address
+		}
+		break;
+		case 0xce:									//ACI D8:   D8 is the next byte in the data
+		{
+			uint16_t result = (uint16_t)state->a + (uint16_t)opcode[1] + state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result > 0xff);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
 
 		}
 		break;
-		case 0xce: UnimplementedInstruction(state); break;
 		case 0xcf: UnimplementedInstruction(state); break;
-		case 0xd0: UnimplementedInstruction(state); break;
+		case 0xd0:									//RNC  (Return if Not Carry)
+		{
+			if (1 == state->cc.cy)
+			{
+				state->pc = state->memory[state->sp] | (state->memory[state->sp + 1] << 8); //Jump to the address on the stack
+				state->sp += 2;
+			}
+		}
+		break;
 		case 0xd1:									//POP D
 		{
 
 		}
 		break;
-		case 0xd2: UnimplementedInstruction(state); break;
+		case 0xd2:									//JNC adr
+		{
+			if (0 == state->cc.cy)
+				state->pc = (opcode[2] << 8) | opcode[1]; //Set the program counter to the next 16bit address
+			else
+				state->pc += 2; //Branch not taken
+		}
+		break;
 		case 0xd3: UnimplementedInstruction(state); break;
-		case 0xd4: UnimplementedInstruction(state); break;
+		case 0xd4:									//CNC adr
+		{
+			if (0 == state->cc.cy)
+			{
+				uint16_t result = state->pc + 2;
+				state->memory[state->sp - 1] = (result >> 8) & 0xff;
+				state->memory[state->sp - 2] = (result & 0xff);
+				state->sp = state->sp - 2;
+				state->pc = (opcode[2] << 8) | opcode[1];
+			}
+			else
+			{
+				state->pc += 2;
+			}
+		}
+		break;
 		case 0xd5:									//PUSH D
 		{
 
@@ -648,23 +1022,92 @@ void Emulate8080p(State8080* state)
 		break;
 		case 0xd6: UnimplementedInstruction(state); break;
 		case 0xd7: UnimplementedInstruction(state); break;
-		case 0xd8: UnimplementedInstruction(state); break;
+		case 0xd8:									//RC (Return if Carry)
+		{
+			if (0 == state->cc.cy)
+			{
+				state->pc = state->memory[state->sp] | (state->memory[state->sp + 1] << 8); //Jump to the address on the stack
+				state->sp += 2;
+			}
+		}
+		break;
 		case 0xd9: UnimplementedInstruction(state); break;
-		case 0xda: UnimplementedInstruction(state); break;
+		case 0xda:									//JC adr
+		{
+			if (1 == state->cc.cy)
+				state->pc = (opcode[2] << 8) | opcode[1]; 
+			else
+				state->pc += 2;
+		}
+		break;
 		case 0xdb: UnimplementedInstruction(state); break;
-		case 0xdc: UnimplementedInstruction(state); break;
+		case 0xdc:									//CC adr
+		{
+			if (1 == state->cc.cy)
+			{
+				uint16_t result = state->pc + 2;
+				state->memory[state->sp - 1] = (result >> 8) & 0xff;
+				state->memory[state->sp - 2] = (result & 0xff);
+				state->sp = state->sp - 2;
+				state->pc = (opcode[2] << 8) | opcode[1];
+			}
+			else
+			{
+				state->pc += 2;
+			}
+		}
+		break;
 		case 0xdd: UnimplementedInstruction(state); break;
-		case 0xde: UnimplementedInstruction(state); break;
+		case 0xde:									//SBI D8
+		{
+			uint16_t result = (uint16_t)state->a - (uint16_t)opcode[1] - (uint16_t)state->cc.cy;
+			state->cc.z = ((result & 0xff) == 0);
+			state->cc.s = ((result & 0x80) != 0);
+			state->cc.cy = (result < 0);
+			state->cc.p = getParity(result & 0xff);
+			state->a = result & 0xff;
+		}
+		break;
 		case 0xdf: UnimplementedInstruction(state); break;
-		case 0xe0: UnimplementedInstruction(state); break;
+		case 0xe0:									//RPO (Return if Parity Odd)
+		{
+			if (0 == state->cc.p)
+			{
+				state->pc = state->memory[state->sp] | (state->memory[state->sp + 1] << 8); //Jump to the address on the stack
+				state->sp += 2;
+			}
+		}
+		break;
 		case 0xe1:									//POP H
 		{
 
 		}
 		break;
-		case 0xe2: UnimplementedInstruction(state); break;
+		case 0xe2:									//JPO adr
+		{
+			if (0 == state->cc.p)
+				state->pc = (opcode[2] << 8) | opcode[1];
+			else
+				state->pc += 2;
+		}
+		break;
 		case 0xe3: UnimplementedInstruction(state); break;
-		case 0xe4: UnimplementedInstruction(state); break;
+		case 0xe4:									//CPO adr (Call if Parity Odd)
+		{
+			if (0 == state->cc.p)
+			{
+				uint16_t result = state->pc + 2;
+				state->memory[state->sp - 1] = (result >> 8) & 0xff;
+				state->memory[state->sp - 2] = (result & 0xff);
+				state->sp = state->sp - 2;
+				state->pc = (opcode[2] << 8) | opcode[1];
+			}
+			else
+			{
+				state->pc += 2;
+			}
+		}
+		break;
 		case 0xe5:									//PUSH H
 		{
 
@@ -678,13 +1121,35 @@ void Emulate8080p(State8080* state)
 		case 0xe7: UnimplementedInstruction(state); break;
 		case 0xe8: UnimplementedInstruction(state); break;
 		case 0xe9: UnimplementedInstruction(state); break;
-		case 0xea: UnimplementedInstruction(state); break;
+		case 0xea:									//JPE adr
+		{
+			if (1 == state->cc.p)
+				state->pc = (opcode[2] << 8) | opcode[1];
+			else
+				state->pc += 2;
+		}
+		break;
 		case 0xeb:									//XCHG
 		{
 
 		}
 		break;
-		case 0xec: UnimplementedInstruction(state); break;
+		case 0xec:									//CPE adr (Call if Parity Even)
+		{
+			if (1 == state->cc.p)
+			{
+				uint16_t result = state->pc + 2;
+				state->memory[state->sp - 1] = (result >> 8) & 0xff;
+				state->memory[state->sp - 2] = (result & 0xff);
+				state->sp = state->sp - 2;
+				state->pc = (opcode[2] << 8) | opcode[1];
+			}
+			else
+			{
+				state->pc += 2;
+			}
+		}
+		break;
 		case 0xed: UnimplementedInstruction(state); break;
 		case 0xee: UnimplementedInstruction(state); break;
 		case 0xef: UnimplementedInstruction(state); break;
@@ -694,7 +1159,14 @@ void Emulate8080p(State8080* state)
 
 		}
 		break;
-		case 0xf2: UnimplementedInstruction(state); break;
+		case 0xf2:									//JP adr
+		{
+			if (0 == state->cc.s)
+				state->pc = (opcode[2] << 8) | opcode[1];
+			else
+				state->pc += 2;
+		}
+		break;
 		case 0xf3: UnimplementedInstruction(state); break;
 		case 0xf4: UnimplementedInstruction(state); break;
 		case 0xf5:									//PUSH PSW
@@ -706,7 +1178,14 @@ void Emulate8080p(State8080* state)
 		case 0xf7: UnimplementedInstruction(state); break;
 		case 0xf8: UnimplementedInstruction(state); break;
 		case 0xf9: UnimplementedInstruction(state); break;
-		case 0xfa: UnimplementedInstruction(state); break;
+		case 0xfa:									//JM adr
+		{
+			if (1 == state->cc.s)
+				state->pc = (opcode[2] << 8) | opcode[1];
+			else
+				state->pc += 2;
+		}
+		break;
 		case 0xfb: UnimplementedInstruction(state); break;
 		case 0xfc: UnimplementedInstruction(state); break;
 		case 0xfd: UnimplementedInstruction(state); break;
